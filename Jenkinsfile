@@ -26,12 +26,23 @@ pipeline{
             }
         }
 
-       stage('Maven Build'){
+        stage('Maven Build'){
             
             steps{
                     sh 'mvn clean install'
             }
         }
 
+        stage('Sonarqube Static Code Analysis'){
+            
+            steps{
+                    script{
+                        withSonarQubeEnv(credentialsId: 'Sonar-Cred') {
+                           sh 'mvn clean package sonar:sonar'
+                        }
+                    }
+            }
+        }
+        
     } 
 }
